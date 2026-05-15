@@ -9,8 +9,4 @@ services:
       - key: SECRET_KEY
         generateValue: true
       - key: DATABASE_URL
-        value: sqlite:///economy.db
-    disk:
-      name: data
-      mountPath: /opt/render/project/src
-      sizeGB: 1
+        value: postgresql://economydb_d10a_user:jVpJokZzp307gVgbaWsMdqodUQQtmGZ9@dpg-d83jddgg4nts73dgoudg-a/economydb_d10a
