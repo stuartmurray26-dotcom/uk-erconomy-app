@@ -1,0 +1,10 @@
+*   d69442b : Merge feature/tests: comprehensive test suite
+|\  
+| * 6de981b : feat: add 34 unit tests covering all routes, API, queries, error handlers
+|/  
+*   d142f20 : Merge feature/api-endpoints into main
+|\  
+| * 48024c9 : feat: add JSON API endpoints for bank-rates, inflation, compare
+|/  
+* 64b3d92 : feat: add comparison page and interactive canvas chart
+* 6119dcd : Initial commit: Flask app scaffold, models, routes, templates, CSS, JS
