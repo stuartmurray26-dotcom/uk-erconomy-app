@@ -9,6 +9,8 @@ def create_app(config=None):
     app = Flask(__name__)
     app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "dev-secret-change-in-prod")
     app.config["TESTING"] = False
+    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")
+    SQLALCHAMEY_TRACK_MODIFICATIONS = False
 
     if config:
         app.config.update(config)

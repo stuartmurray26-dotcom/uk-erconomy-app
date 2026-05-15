@@ -1,5 +1,5 @@
 # UK Economy Explorer
-
+postgresql://economydb_d10a_user:jVpJokZzp307gVgbaWsMdqodUQQtmGZ9@dpg-d83jddgg4nts73dgoudg-a/economydb_d10a
 A Flask web application exploring Bank of England base rate changes and UK annual CPI inflation from 1975 to the present day. Built for CS551P Assessment 3.
 
 ## Live deployment
