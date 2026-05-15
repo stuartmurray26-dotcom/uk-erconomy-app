@@ -1,33 +1,18 @@
-"""Database access layer using Python's built-in sqlite3."""
-import sqlite3
-import os
-
-DB_PATH = os.environ.get("DB_PATH", os.path.join(os.path.dirname(__file__), "economy.db"))
+from flask_sqlalchemy import SQLAlchemy
 
 
-def get_db():
-    conn = sqlite3.connect(DB_PATH)
-    conn.row_factory = sqlite3.Row
-    return conn
+db = SQLAlchemy()
 
+class BankRate(db.Model):
+    __tablename__ = "bank_rate"
 
-def init_db(db_path=None):
-    path = db_path or DB_PATH
-    conn = sqlite3.connect(path)
-    conn.row_factory = sqlite3.Row
-    conn.execute("""
-        CREATE TABLE IF NOT EXISTS bank_rate (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            date_changed TEXT NOT NULL UNIQUE,
-            rate REAL NOT NULL
-        )
-    """)
-    conn.execute("""
-        CREATE TABLE IF NOT EXISTS inflation (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            year INTEGER NOT NULL UNIQUE,
-            rate REAL NOT NULL
-        )
-    """)
-    conn.commit()
-    conn.close()
+    id = db.Column(db.Integer, primary_key=True)
+    date_changed = db.Column(db.String, unique=True, nullable=False)
+    rate = db.Column(db.Float, nullable=False)
+
+class Inflation(db.Model):
+    __tablename__ = "inflation"
+
+    id = db.Column(db.Integer, primary_key=True)
+    year = db.Column(db.Integer, unique=True, nullable=False)
+    rate = db.Column(db.Float, nullable=False)
