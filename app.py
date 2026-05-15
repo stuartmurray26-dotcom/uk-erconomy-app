@@ -4,20 +4,21 @@ from flask import Flask
 from models import db
 from routes import main
 
-
 def create_app(config=None):
     app = Flask(__name__)
     app.config["SQLALCHEMY_DATABASE_URI"] = os.environ["DATABASE_URL"]
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
     if config:
         app.config.update(config)
-        # Allow test to override DB path
-        if "DB_PATH" in config:
-            import models
-            models.DB_PATH = config["DB_PATH"]
 
+    # Initialize SQLAlchemy
+    db.init_app(app)
+
+    # Register routes
     app.register_blueprint(main)
 
+    # Seed command
     @app.cli.command("seed")
     def seed_command():
         """Load open data into the database."""
@@ -29,13 +30,15 @@ def create_app(config=None):
 
 if __name__ == "__main__":
     application = create_app()
-    db()
-    # Auto-seed on first run if DB is empty
-    from models import get_db
-    db = get_db()
-    count = db.execute("SELECT COUNT(*) FROM bank_rate").fetchone()[0]
-    if count == 0:
-        print("Empty database – seeding now ...")
+
+    # Auto-seed on first run (SQLAlchemy version)
+    with application.app_context():
+        from models import BankRate
         from load_data import seed_all
-        seed_all(conn=db)
+
+        count = BankRate.query.count()
+        if count == 0:
+            print("Empty database – seeding now ...")
+            seed_all()
+
     application.run(debug=True)
