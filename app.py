@@ -29,7 +29,7 @@ def create_app(config=None):
 
 if __name__ == "__main__":
     application = create_app()
-    init_db()
+    db()
     # Auto-seed on first run if DB is empty
     from models import get_db
     db = get_db()
