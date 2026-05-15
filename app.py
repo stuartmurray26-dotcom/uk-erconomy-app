@@ -15,11 +15,17 @@ def create_app(config=None):
     with app.app_context():
         db.create_all()
 
+        from models import BankRate
+        from load_data import seed_all
+
+        if BankRate.query.count() == 0:
+            print("Empty database – seeding now ...")
+            seed_all()  
+
     if config:
         app.config.update(config)
 
     # Register routes
-    from routes import main
     app.register_blueprint(main)
 
     # Seed command
