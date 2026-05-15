@@ -1,15 +1,14 @@
 """UK Economy Explorer – Flask application factory."""
 import os
 from flask import Flask
-from models import init_db
+from models import db
 from routes import main
 
 
 def create_app(config=None):
     app = Flask(__name__)
-    app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "dev-secret-change-in-prod")
-    app.config["TESTING"] = False
-
+    app.config["SQLALCHEMY_DATABASE_URI"] = os.environ["DATABASE_URL"]
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     if config:
         app.config.update(config)
         # Allow test to override DB path
