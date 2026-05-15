@@ -9,4 +9,4 @@ services:
       - key: SECRET_KEY
         generateValue: true
       - key: DATABASE_URL
-        value: postgresql://economydb_d10a_user:jVpJokZzp307gVgbaWsMdqodUQQtmGZ9@dpg-d83jddgg4nts73dgoudg-a/economydb_d10a
+        value: postgresql://economydb_d10a_user:jVpJokZzp307gVgbaWsMdqodUQQtmGZ9@dpg-d83jddgg4nts73dgoudg-a.oregon-postgres.render.com/economydb_d10a
