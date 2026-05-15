@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Rate on {{ record['date_changed'] }}{% endblock %}
+
+{% block content %}
+<a class="btn btn-sm" href="{{ url_for('main.bank_rates') }}">← Back to list</a>
+
+<h1>Bank Rate: {{ record['rate'] }}%</h1>
+<p class="subhead">Effective from <strong>{{ record['date_changed'] }}</strong></p>
+
+<div class="detail-grid">
+  <div class="detail-card">
+    <h2>Rate Decision</h2>
+    <dl>
+      <dt>Rate set</dt><dd>{{ record['rate'] }}%</dd>
+      {% if change is not none %}
+        <dt>Change</dt>
+        <dd class="{% if change > 0 %}up{% elif change < 0 %}down{% else %}flat{% endif %}">
+          {{ '+' if change > 0 }}{{ change }} pp
+        </dd>
+      {% endif %}
+      {% if prev_rate %}
+        <dt>Previous rate</dt>
+        <dd>{{ prev_rate['rate'] }}% ({{ prev_rate['date_changed'] }})</dd>
+      {% endif %}
+      {% if next_rate %}
+        <dt>Next change</dt>
+        <dd>{{ next_rate['rate'] }}% ({{ next_rate['date_changed'] }})</dd>
+      {% endif %}
+    </dl>
+  </div>
+
+  <div class="detail-card">
+    <h2>Context</h2>
+    <dl>
+      <dt>Average (all time)</dt><dd>{{ avg_rate }}%</dd>
+      <dt>Rank (highest first)</dt><dd>{{ rank }} of {{ total }}</dd>
+      {% if inflation %}
+        <dt>Inflation ({{ record['date_changed'][:4] }} CPI)</dt>
+        <dd>{{ inflation['rate'] }}%</dd>
+        <dt>Real rate (approx.)</dt>
+        {% set rr = record['rate'] - inflation['rate'] %}
+        <dd class="{{ 'up' if rr > 0 else 'down' }}">
+          {{ '%+.2f'|format(rr) }}%
+        </dd>
+      {% else %}
+        <dt>Inflation data</dt><dd>Not available for this year</dd>
+      {% endif %}
+    </dl>
+  </div>
+</div>
+
+<div class="nav-buttons">
+  {% if prev_rate %}
+    <a class="btn" href="{{ url_for('main.bank_rate_detail', record_id=prev_rate['id']) }}">← {{ prev_rate['date_changed'] }}</a>
+  {% endif %}
+  {% if next_rate %}
+    <a class="btn" href="{{ url_for('main.bank_rate_detail', record_id=next_rate['id']) }}">{{ next_rate['date_changed'] }} →</a>
+  {% endif %}
+</div>
+{% endblock %}

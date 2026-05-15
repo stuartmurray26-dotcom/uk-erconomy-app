@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Inflation {{ record['year'] }}{% endblock %}
+
+{% block content %}
+<a class="btn btn-sm" href="{{ url_for('main.inflation_list') }}">← Back to list</a>
+
+<h1>Inflation in {{ record['year'] }}: {{ record['rate'] }}%</h1>
+
+<div class="detail-grid">
+  <div class="detail-card">
+    <h2>Inflation Stats</h2>
+    <dl>
+      <dt>Annual CPI rate</dt><dd>{{ record['rate'] }}%</dd>
+      <dt>Historical average</dt><dd>{{ avg }}%</dd>
+      <dt>Deviation from average</dt>
+      {% set dev = record['rate'] - avg %}
+      <dd class="{{ 'up' if dev > 0 else 'down' }}">
+        {{ '+' if dev > 0 }}{{ '%.2f'|format(dev) }} pp
+      </dd>
+      <dt>Rank (highest inflation)</dt><dd>{{ rank }} of {{ total }}</dd>
+    </dl>
+  </div>
+
+  <div class="detail-card">
+    <h2>Bank Rate ({{ record['year'] }})</h2>
+    {% if br_changes %}
+      <p><strong>{{ br_changes|length }}</strong> rate change{{ 's' if br_changes|length != 1 }} in {{ record['year'] }}.
+         Approx. average: <strong>{{ avg_br }}%</strong></p>
+      <table class="data-table compact">
+        <thead><tr><th>Date</th><th>Rate</th></tr></thead>
+        <tbody>
+          {% for br in br_changes %}
+          <tr>
+            <td>{{ br['date_changed'] }}</td>
+            <td>{{ br['rate'] }}%</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% elif avg_br %}
+      <p>No rate changes during {{ record['year'] }}. Rate in force: <strong>{{ avg_br }}%</strong></p>
+    {% else %}
+      <p>No bank rate data available for {{ record['year'] }}.</p>
+    {% endif %}
+    {% if avg_br %}
+      {% set rr = avg_br - record['rate'] %}
+      <p>Real rate (bank rate − inflation):
+         <strong class="{{ 'up' if rr > 0 else 'down' }}">
+           {{ '%+.2f'|format(rr) }}%
+         </strong>
+      </p>
+    {% endif %}
+  </div>
+</div>
+
+<div class="nav-buttons">
+  {% set prev_year = record['year'] - 1 %}
+  {% set next_year = record['year'] + 1 %}
+  <a class="btn" href="{{ url_for('main.inflation_detail', year=prev_year) }}">← {{ prev_year }}</a>
+  <a class="btn" href="{{ url_for('main.inflation_detail', year=next_year) }}">{{ next_year }} →</a>
+</div>
+{% endblock %}

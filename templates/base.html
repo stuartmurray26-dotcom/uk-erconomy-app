@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{% block title %}UK Economy Explorer{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+      <a class="brand" href="{{ url_for('main.index') }}">📈 UK Economy Explorer</a>
+      <ul class="nav-links">
+        <li><a href="{{ url_for('main.bank_rates') }}"
+               {% if request.endpoint == 'main.bank_rates' %}class="active"{% endif %}>Bank Rates</a></li>
+        <li><a href="{{ url_for('main.inflation_list') }}"
+               {% if request.endpoint == 'main.inflation_list' %}class="active"{% endif %}>Inflation</a></li>
+        <li><a href="{{ url_for('main.compare') }}"
+               {% if request.endpoint == 'main.compare' %}class="active"{% endif %}>Compare</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="container">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer>
+    <p>Data sources: <a href="https://www.bankofengland.co.uk/boeapps/database/" target="_blank">Bank of England Database</a>
+    &amp; <a href="https://www.ons.gov.uk/" target="_blank">ONS CPI</a> — CS551P Assessment 3</p>
+  </footer>
+</body>
+</html>

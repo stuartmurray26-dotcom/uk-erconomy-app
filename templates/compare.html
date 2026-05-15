@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Compare – Bank Rate vs Inflation{% endblock %}
+
+{% block content %}
+<h1>Bank Rate vs Inflation Comparison</h1>
+<p>Comparing annual CPI inflation against the approximate Bank of England base rate for each year.
+   A negative <em>real rate</em> means inflation exceeded the Bank Rate — savers lost purchasing power.</p>
+
+<div class="chart-container">
+  <canvas id="compareChart" width="900" height="380"></canvas>
+</div>
+
+<script>
+  const chartData = {{ data | tojson }};
+</script>
+<script src="{{ url_for('static', filename='js/chart.js') }}"></script>
+
+<h2>Year-by-Year Table</h2>
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>Year</th>
+      <th>Inflation (CPI %)</th>
+      <th>Avg Bank Rate (%)</th>
+      <th>Real Rate (%)</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for row in data %}
+    <tr>
+      <td>{{ row['year'] }}</td>
+      <td>
+        <span class="rate-badge {% if row['inflation'] >= 5 %}high{% elif row['inflation'] >= 2 %}mid{% else %}low{% endif %}">
+          {{ row['inflation'] }}%
+        </span>
+      </td>
+      <td>{% if row['bank_rate'] is not none %}{{ row['bank_rate'] }}%{% else %}<em>n/a</em>{% endif %}</td>
+      <td>
+        {% if row['bank_rate'] is not none %}
+          <span class="{{ 'up' if row['real_rate'] > 0 else 'down' }}">
+            {{ '%+.2f'|format(row['real_rate']) }}%
+          </span>
+        {% else %}<em>n/a</em>{% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<div class="analysis-box">
+  <h2>Key Observations</h2>
+  <ul>
+    <li>The <strong>1990–1992</strong> period saw very high bank rates (above 10%) used to control runaway inflation and defend Sterling in the ERM.</li>
+    <li>The <strong>2009 financial crisis</strong> led to emergency cuts to a then-historic low of 0.5%, maintained for seven years.</li>
+    <li>The <strong>2022–2023 cost-of-living crisis</strong> pushed CPI to its highest level since the early 1990s, prompting rapid rate rises from 0.1% to 5.25%.</li>
+    <li>Years with a <span class="up">positive real rate</span> rewarded savers; years with a <span class="down">negative real rate</span> eroded savings.</li>
+  </ul>
+</div>
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}UK Economy Explorer – Home{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <h1>UK Economy Explorer</h1>
+  <p class="lead">Explore Bank of England base rates and annual UK inflation from 1975 to the present day.
+     Understand how monetary policy has responded to inflationary pressures over five decades.</p>
+</section>
+
+<section class="stats-grid">
+  <div class="stat-card">
+    <span class="stat-number">{{ total_br }}</span>
+    <span class="stat-label">Bank Rate Changes</span>
+    <a class="btn" href="{{ url_for('main.bank_rates') }}">Browse →</a>
+  </div>
+  <div class="stat-card">
+    <span class="stat-number">{{ total_inf }}</span>
+    <span class="stat-label">Years of Inflation Data</span>
+    <a class="btn" href="{{ url_for('main.inflation_list') }}">Browse →</a>
+  </div>
+  {% if latest_br %}
+  <div class="stat-card highlight">
+    <span class="stat-number">{{ latest_br['rate'] }}%</span>
+    <span class="stat-label">Current Bank Rate</span>
+    <span class="stat-sub">Set {{ latest_br['date_changed'] }}</span>
+  </div>
+  {% endif %}
+  {% if latest_inf %}
+  <div class="stat-card highlight">
+    <span class="stat-number">{{ latest_inf['rate'] }}%</span>
+    <span class="stat-label">Latest Inflation ({{ latest_inf['year'] }})</span>
+    <span class="stat-sub">Annual CPI</span>
+  </div>
+  {% endif %}
+</section>
+
+<section class="info-cards">
+  <div class="info-card">
+    <h2>📊 Bank Rate History</h2>
+    <p>The Bank of England's Monetary Policy Committee sets the base rate to control inflation.
+       Browse every rate change since 1975 and see how each decision was made in its economic context.</p>
+    <a class="btn" href="{{ url_for('main.bank_rates') }}">View all rate changes</a>
+  </div>
+  <div class="info-card">
+    <h2>📉 Inflation Data</h2>
+    <p>Annual CPI inflation from 1989 to 2025. See how the cost of living has risen over the decades,
+       from the double-digit years of the early 1990s to the post-pandemic surge of 2022–23.</p>
+    <a class="btn" href="{{ url_for('main.inflation_list') }}">View inflation by year</a>
+  </div>
+  <div class="info-card">
+    <h2>🔍 Compare &amp; Analyse</h2>
+    <p>Place both datasets side by side. Examine the real interest rate (bank rate minus inflation)
+       and spot periods where savers were rewarded — or penalised — by monetary policy.</p>
+    <a class="btn" href="{{ url_for('main.compare') }}">Open comparison view</a>
+  </div>
+</section>
+{% endblock %}

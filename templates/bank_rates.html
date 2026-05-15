@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Bank Rate History{% endblock %}
+
+{% block content %}
+<h1>Bank of England Rate Changes</h1>
+<p>{{ total }} rate decisions recorded. Each row shows the date the rate took effect.</p>
+
+<form class="filter-bar" method="get">
+  <label for="year">Filter by year:</label>
+  <select name="year" id="year" onchange="this.form.submit()">
+    <option value="">All years</option>
+    {% for y in years %}
+      <option value="{{ y }}" {% if selected_year == y %}selected{% endif %}>{{ y }}</option>
+    {% endfor %}
+  </select>
+  {% if selected_year %}
+    <a class="btn btn-sm" href="{{ url_for('main.bank_rates') }}">Clear filter</a>
+  {% endif %}
+</form>
+
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>Date Changed</th>
+      <th>Rate (%)</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for rec in records %}
+    <tr>
+      <td>{{ rec['date_changed'] }}</td>
+      <td>
+        <span class="rate-badge {% if rec['rate'] >= 5 %}high{% elif rec['rate'] >= 1 %}mid{% else %}low{% endif %}">
+          {{ rec['rate'] }}%
+        </span>
+      </td>
+      <td><a class="btn btn-sm" href="{{ url_for('main.bank_rate_detail', record_id=rec['id']) }}">Detail</a></td>
+    </tr>
+    {% else %}
+    <tr><td colspan="3">No records found.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<nav class="pagination">
+  {% if page > 1 %}
+    <a class="btn btn-sm" href="{{ url_for('main.bank_rates', page=page-1, year=selected_year) }}">← Prev</a>
+  {% endif %}
+  <span>Page {{ page }} of {{ total_pages }}</span>
+  {% if page < total_pages %}
+    <a class="btn btn-sm" href="{{ url_for('main.bank_rates', page=page+1, year=selected_year) }}">Next →</a>
+  {% endif %}
+</nav>
+{% endblock %}

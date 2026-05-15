@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}UK Inflation History{% endblock %}
+
+{% block content %}
+<h1>UK Annual Inflation (CPI)</h1>
+<p>{{ records|length }} years of data. Average: <strong>{{ avg }}%</strong></p>
+
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>Year</th>
+      <th>CPI Rate (%)</th>
+      <th>vs Average</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for rec in records %}
+    <tr>
+      <td>{{ rec['year'] }}</td>
+      <td>
+        <span class="rate-badge {% if rec['rate'] >= 5 %}high{% elif rec['rate'] >= 2 %}mid{% else %}low{% endif %}">
+          {{ rec['rate'] }}%
+        </span>
+      </td>
+      <td>
+        {% set diff = rec['rate'] - avg %}
+        <span class="{{ 'up' if diff > 0 else 'down' }}">
+          {{ '+' if diff > 0 }}{{ '%.1f'|format(diff) }} pp
+        </span>
+      </td>
+      <td><a class="btn btn-sm" href="{{ url_for('main.inflation_detail', year=rec['year']) }}">Detail</a></td>
+    </tr>
+    {% else %}
+    <tr><td colspan="4">No data.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
