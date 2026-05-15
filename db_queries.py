@@ -6,7 +6,7 @@ from sqlalchemy import extract, func
 
 # ── bank rates ────────────────────────────────────────────────────────────────
 
-def count_bank_rates():
+def count_bank_rate():
     return db.session.query(func.count(BankRate.id)).scalar()
 
 
@@ -14,7 +14,7 @@ def get_latest_bank_rate():
     return BankRate.query.order_by(BankRate.date_changed.desc()).first()
 
 
-def get_bank_rates_page(page, per_page, year=None):
+def get_bank_rate_page(page, per_page, year=None):
     query = BankRate.query
 
     if year:
@@ -61,11 +61,11 @@ def get_next_bank_rate(date_str):
     )
 
 
-def get_all_bank_rates():
+def get_all_bank_rate():
     return BankRate.query.order_by(BankRate.date_changed.desc()).all()
 
 
-def get_bank_rates_for_year(year):
+def get_bank_rate_for_year(year):
     return (
         BankRate.query
         .filter(extract('year', func.date(BankRate.date_changed)) == year)
@@ -84,7 +84,7 @@ def get_rate_in_force_at_year_end(year):
 
 
 def year_avg_bank_rate(year):
-    rows = get_bank_rates_for_year(year)
+    rows = get_bank_rate_for_year(year)
     if rows:
         return round(sum(r.rate for r in rows) / len(rows), 2)
 

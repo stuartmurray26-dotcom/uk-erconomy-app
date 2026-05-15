@@ -2,10 +2,10 @@
 import math
 from flask import Blueprint, abort, jsonify, render_template, request
 from db_queries import (
-    count_bank_rates, count_inflation, get_latest_bank_rate, get_latest_inflation,
-    get_bank_rates_page, get_bank_rate_years, get_bank_rate_by_id,
-    get_prev_bank_rate, get_next_bank_rate, get_all_bank_rates,
-    get_bank_rates_for_year, year_avg_bank_rate,
+    count_bank_rate, count_inflation, get_latest_bank_rate, get_latest_inflation,
+    get_bank_rate_page, get_bank_rate_years, get_bank_rate_by_id,
+    get_prev_bank_rate, get_next_bank_rate, get_all_bank_rate,
+    get_bank_rate_for_year, year_avg_bank_rate,
     get_all_inflation, get_inflation_by_year,
 )
 
@@ -19,7 +19,7 @@ PER_PAGE = 25
 def index():
     return render_template(
         "index.html",
-        total_br=count_bank_rates(),
+        total_br=count_bank_rate(),
         total_inf=count_inflation(),
         latest_br=get_latest_bank_rate(),
         latest_inf=get_latest_inflation(),
@@ -27,17 +27,17 @@ def index():
 
 
 # ── bank rates ─────────────────────────────────────────────────────────────────
-@main.route("/bank-rates")
-def bank_rates():
+@main.route("/bank-rate")
+def bank_rate():
     page = request.args.get("page", 1, type=int)
     year = request.args.get("year", type=int)
 
-    records, total = get_bank_rates_page(page, PER_PAGE, year=year)
+    records, total = get_bank_rate_page(page, PER_PAGE, year=year)
     total_pages = max(1, math.ceil(total / PER_PAGE))
     years = get_bank_rate_years()
 
     return render_template(
-        "bank_rates.html",
+        "bank_rate.html",
         records=records,
         page=page,
         total=total,
@@ -63,7 +63,7 @@ def bank_rate_detail(record_id):
     year = int(record.date_changed[:4])
     inflation = get_inflation_by_year(year)
 
-    all_rates = [r.rate for r in get_all_bank_rates()]
+    all_rates = [r.rate for r in get_all_bank_rate()]
     avg_rate = round(sum(all_rates) / len(all_rates), 2) if all_rates else None
     rank = sum(1 for r in all_rates if r > record.rate) + 1
 
@@ -100,7 +100,7 @@ def inflation_detail(year):
     sorted_by_rate = sorted(all_records, key=lambda r: r.rate, reverse=True)
     rank = next((i + 1 for i, r in enumerate(sorted_by_rate) if r.year == year), None)
 
-    br_changes = get_bank_rates_for_year(year)
+    br_changes = get_bank_rate_for_year(year)
     avg_br = year_avg_bank_rate(year)
 
     return render_template(
@@ -134,8 +134,8 @@ def compare():
 
 # ── API ────────────────────────────────────────────────────────────────────────
 @main.route("/api/bank-rates")
-def api_bank_rates():
-    records = get_all_bank_rates()
+def api_bank_rate():
+    records = get_all_bank_rate()
     return jsonify([
         {
             "id": r.id,

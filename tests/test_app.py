@@ -160,7 +160,7 @@ class TestCompare(BaseTestCase):
 
 # ── API endpoints ─────────────────────────────────────────────────────────────
 class TestAPI(BaseTestCase):
-    def test_bank_rates_json(self):
+    def test_bank_rate_json(self):
         import json
         r = self.get("/api/bank-rates")
         self.assertEqual(r.status_code, 200)
@@ -243,9 +243,9 @@ class TestDBQueries(BaseTestCase):
         nxt = get_next_bank_rate("2023-06-22", db=self.db_conn)
         self.assertEqual(nxt["date_changed"], "2023-08-03")
 
-    def test_count_bank_rates(self):
-        from db_queries import count_bank_rates
-        self.assertEqual(count_bank_rates(db=self.db_conn), 4)
+    def test_count_bank_rate(self):
+        from db_queries import count_bank_rate
+        self.assertEqual(count_bank_rate(db=self.db_conn), 4)
 
     def test_count_inflation(self):
         from db_queries import count_inflation

@@ -2,7 +2,7 @@
 {% block title %}Rate on {{ record['date_changed'] }}{% endblock %}
 
 {% block content %}
-<a class="btn btn-sm" href="{{ url_for('main.bank_rates') }}">← Back to list</a>
+<a class="btn btn-sm" href="{{ url_for('main.bank_rate') }}">← Back to list</a>
 
 <h1>Bank Rate: {{ record['rate'] }}%</h1>
 <p class="subhead">Effective from <strong>{{ record['date_changed'] }}</strong></p>

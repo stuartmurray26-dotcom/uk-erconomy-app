@@ -12,7 +12,7 @@
   <div class="stat-card">
     <span class="stat-number">{{ total_br }}</span>
     <span class="stat-label">Bank Rate Changes</span>
-    <a class="btn" href="{{ url_for('main.bank_rates') }}">Browse →</a>
+    <a class="btn" href="{{ url_for('main.bank_rate') }}">Browse →</a>
   </div>
   <div class="stat-card">
     <span class="stat-number">{{ total_inf }}</span>
@@ -40,7 +40,7 @@
     <h2>📊 Bank Rate History</h2>
     <p>The Bank of England's Monetary Policy Committee sets the base rate to control inflation.
        Browse every rate change since 1975 and see how each decision was made in its economic context.</p>
-    <a class="btn" href="{{ url_for('main.bank_rates') }}">View all rate changes</a>
+    <a class="btn" href="{{ url_for('main.bank_rate') }}">View all rate changes</a>
   </div>
   <div class="info-card">
     <h2>📉 Inflation Data</h2>

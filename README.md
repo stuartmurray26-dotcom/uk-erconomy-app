@@ -42,7 +42,7 @@ uk_economy_app/
 ├── templates/
 │   ├── base.html
 │   ├── index.html
-│   ├── bank_rates.html
+│   ├── bank_rate.html
 │   ├── bank_rate_detail.html
 │   ├── inflation.html
 │   ├── inflation_detail.html

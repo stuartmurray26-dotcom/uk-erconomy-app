@@ -9,7 +9,7 @@ BANK_RATE_FILE = os.path.join(os.path.dirname(__file__), "data", "bank_rate.csv"
 INFLATION_FILE = os.path.join(os.path.dirname(__file__), "data", "inflation.csv")
 
 
-def load_bank_rates():
+def load_bank_rate():
     loaded = skipped = 0
 
     with open(BANK_RATE_FILE, newline="", encoding="utf-8") as f:
@@ -71,7 +71,7 @@ def load_inflation():
 
 def seed_all():
     print("Seeding Bank Rate data ...")
-    br = load_bank_rates()
+    br = load_bank_rate()
 
     print("Seeding Inflation data ...")
     inf = load_inflation()
